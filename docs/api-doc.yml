@@ -1,0 +1,63 @@
+info:
+  title: Salcedonie API
+  version: 1.0.0
+servers:
+  - url: 'https://api.salcedonie.nakasar.me'
+  - url: 'http://localhost:5000'
+openapi: 3.0.0
+apis:
+  - ./src/**/*.js
+paths:
+  /users:
+    get:
+      operationId: getUsers
+      summary: Get existing users
+      description: Get existing users summaries.
+      responses:
+        '200':
+          description: List of users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      operationId: createUser
+      summary: Create a user
+      description: Create a user
+      requestBody:
+        description: User to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: User created (see id in Location header)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  schemas:
+    UserCreate:
+      type: object
+      properties:
+        username:
+          type: string
+        discord_id:
+          type: string
+      example:
+        username: Nakasar
+        discord_id: 11119836820
+    User:
+      allOf:
+        - $ref: '#/components/schemas/UserCreate'
+        - type: object
+          properties:
+            id:
+              type: string
+          example:
+            id: dazda9763
+tags: []

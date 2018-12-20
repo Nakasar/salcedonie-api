@@ -8,8 +8,20 @@
   },
   "scripts": {
     "start": "node ./bin/app.js",
-    "watch": "nodemon ./bin/app.js"
+    "watch": "nodemon ./bin/app.js",
+    "doc": "swagger-jsdoc -d src/docs/openapi.definition.js -o docs/api-doc.yml"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.18.9",
+    "swagger-jsdoc": "^3.2.6"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "joi": "^14.3.0",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.0"
+  }
 }
