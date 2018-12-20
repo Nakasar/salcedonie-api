@@ -1,5 +1,7 @@
 const { ForbiddenError, MissingAuthenticationError } = require('../errors');
 
+const TokenService = require('../services/token.service');
+
 function authenticate(req, res, next) {
     const token = getToken(req.headers);
 
@@ -7,7 +9,7 @@ function authenticate(req, res, next) {
 
     if (token) {
         try {
-            const payload = verifyToken(token);
+            const payload = TokenService.verify(token);
 
             authentication = { is_valid: true, data: payload };
         } catch(err) {
@@ -69,10 +71,6 @@ function verifyAuthentication(locals) {
     }
 
     return true;
-}
-
-function verifyToken(token) {
-    return jwt.verify(token, 'shhhhh');
 }
 
 module.exports = {

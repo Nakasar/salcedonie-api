@@ -1,3 +1,11 @@
+class BadRequestError extends Error {
+    constructor(message, id) {
+        super(message);
+        this.status = 400;
+        this.name = id || 'BAD_REQUEST';
+    }
+}
+
 class ForbiddenError extends Error {
     constructor(message, id) {
         super(message);
@@ -15,6 +23,7 @@ class MissingAuthenticationError extends Error {
 }
 
 module.exports = {
+    BadRequestError,
     ForbiddenError,
     MissingAuthenticationError,
 };
