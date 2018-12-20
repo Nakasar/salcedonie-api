@@ -2,14 +2,14 @@ const { ForbiddenError, MissingAuthenticationError } = require('../errors');
 
 const TokenService = require('../services/token.service');
 
-function authenticate(req, res, next) {
+async function authenticate(req, res, next) {
     const token = getToken(req.headers);
 
     let authentication = null;
 
     if (token) {
         try {
-            const payload = TokenService.verify(token);
+            const payload = await TokenService.verify(token);
 
             authentication = { is_valid: true, data: payload };
         } catch(err) {

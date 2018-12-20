@@ -22,8 +22,17 @@ class MissingAuthenticationError extends Error {
     }
 }
 
+class ResourceNotFoundError extends Error {
+    constructor(message, id) {
+        super(message);
+        this.status = 404;
+        this.name = id || 'NOT_FOUND';
+    }
+}
+
 module.exports = {
     BadRequestError,
     ForbiddenError,
     MissingAuthenticationError,
+    ResourceNotFoundError,
 };

@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const Joi = require('joi');
 
-const { BadRequestError } = require('../errors');
+const { BadRequestError, ResourceNotFoundError } = require('../errors');
 
 const {requireAdminRights} = require('../middlewares/authentication.middleware');
 
@@ -35,8 +35,21 @@ router.use(requireAdminRights);
  *            id:
  *              type: string
  *          example:
- *            id: dazda9763
- *
+ *            id: '5c1c06cd8d93224570fcc65b'
+ *  securitySchemes:
+ *    admin:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ *  parameters:
+ *    userId:
+ *      name: userId
+ *      in: path
+ *      required: true
+ *      description: ID of user
+ *      schema:
+ *        type: string
+ *        example: '5c1c06cd8d93224570fcc65b'
  */
 
 /**
@@ -47,6 +60,8 @@ router.use(requireAdminRights);
  *    operationId: getUsers
  *    summary: Get existing users
  *    description: Get existing users summaries.
+ *    security:
+ *      - admin: []
  *    responses:
  *      200:
  *        description: List of users.
@@ -60,7 +75,7 @@ router.use(requireAdminRights);
  */
 router.get('/users', async (req, res, next) => {
   try {
-    const users = await User.findAll({}, 'id username discord_id');
+    const users = await User.find({}, 'id username discord_id');
 
     return res.json(users);
   } catch (err) {
@@ -76,6 +91,8 @@ router.get('/users', async (req, res, next) => {
  *    operationId: createUser
  *    summary: Create a user
  *    description: Create a user
+ *    security:
+ *      - admin: []
  *    requestBody:
  *      description: User to create
  *      content:
@@ -114,18 +131,83 @@ router.post('/users', async (req, res, next) => {
     }
 
     const user = new User({ username, discord_id, password: hash });
+    await user.save();
 
-    const savedUser = await user.save();
+    const createdUser = user.findOne({ username }, 'id username discord_id');
 
-    return res.json(savedUser);
+    return res.json(createdUser);
   } catch (err) {
     return next(err);
   }
 });
 
-router.patch('/users/:userId', async (req, res, next) => {
+/**
+ * @swagger
+ *
+ * /users/{userId}:
+ *  post:
+ *    operationId: updateUser
+ *    summary: Update a user
+ *    description: Update a user
+ *    security:
+ *      - admin: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/userId'
+ *    requestBody:
+ *      description: Fields to update
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/UserCreate'
+ *    responses:
+ *      204:
+ *        description: User updated
+ */
+router.post('/users/:userId', async (req, res, next) => {
   try {
+    const { userId } = req.params;
+    const { username, discord_id, password } = req.body;
 
+    const result = Joi.validate({ username, discord_id, password }, Joi.object().keys({
+      username: Joi.string().alphanum().min(3).max(50),
+      discord_id: Joi.string().regex(/^[0-9]{11}$/),
+      password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/),
+    }));
+
+    let user;
+    try {
+      user = await User.findById(userId);
+    } catch(err) {
+      throw new BadRequestError('userID in path parameters is not a valid ID.');
+    }
+
+    if (!user) {
+      throw new ResourceNotFoundError('The user does not exist.', 'USER_NOT_FOUND');
+    }
+
+    if (username) {
+      user.username = username;
+    }
+    if (discord_id) {
+      user.discord_id = discord_id;
+    }
+    if (password) {
+      try {
+        user.password = await bcrypt.hash(password, 8);
+      } catch (err) {
+        console.error('Could not hash password: ', JSON.stringify(err));
+
+        throw new BadRequestError('Password is not valid.');
+      }
+    }
+
+    try {
+      await user.save();
+    } catch (err) {
+      throw new BadRequestError('Check unity constraints.');
+    }
+
+    return res.sendStatus(204);
   } catch (err) {
     return next(err);
   }
