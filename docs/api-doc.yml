@@ -90,6 +90,81 @@ paths:
       responses:
         '204':
           description: User updated
+  '/accounts/{accountId}':
+    get:
+      operationId: getAccount
+      tags:
+        - events
+  /events:
+    get:
+      operationId: getEvents
+      tags:
+        - events
+    post:
+      operationId: createEvent
+      tags:
+        - events
+  '/events/{eventId}':
+    get:
+      operationId: Get event details and last infos.
+      tags:
+        - events
+    patch:
+      operationId: updateEvent
+      tags:
+        - events
+    delete:
+      operationId: archiveEvent
+      tags:
+        - events
+  '/events/{eventId}/actions':
+    get:
+      operationId: Get last actions in event
+      tags:
+        - actions
+    post:
+      operationId: postAction
+      tags:
+        - actions
+  '/events/{eventId}/actions/{actionId}':
+    get:
+      operationId: getAction
+      tags:
+        - actions
+    patch:
+      operationId: updateAction
+      tags:
+        - events
+        - actions
+  /characters:
+    get:
+      operationId: Get characters
+      tags:
+        - characters
+    post:
+      operationId: createCharacter
+      tags:
+        - characters
+  '/characters/{characterId}':
+    get:
+      operationId: Get character details
+      tags:
+        - characters
+    patch:
+      operationId: updateCharacter
+      tags:
+        - characters
+  '/characters/{characterId}/actions':
+    get:
+      operationId: getCharacterActions
+      tags:
+        - characters
+        - actions
+  /actions:
+    get:
+      operationId: getActions
+      tags:
+        - actions
 components:
   schemas:
     UserCreate:
