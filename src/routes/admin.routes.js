@@ -24,9 +24,12 @@ router.use(requireAdminRights);
  *          type: string
  *        discord_id:
  *          type: string
+ *        admin:
+ *          type: boolean
  *      example:
- *        username: Nakasar
+ *        username: john Smith
  *        discord_id: 11119836820
+ *        admin: false
  *    User:
  *      allOf:
  *        - $ref: '#/components/schemas/UserCreate'
@@ -130,10 +133,18 @@ router.post('/users', async (req, res, next) => {
       throw new BadRequestError('Password is not valid.');
     }
 
+    const userFound = await User.findOne({ $or: [{ username }, { discord_id }] });
+    if (userFound && userFound.discord_id === discord_id)  {
+      throw new BadRequestError('There is already a user with this discord_id.');
+    }
+    if (userFound) {
+      throw new BadRequestError('There is already a user with this username.');
+    }
+
     const user = new User({ username, discord_id, password: hash });
     await user.save();
 
-    const createdUser = user.findOne({ username }, 'id username discord_id');
+    const createdUser = await User.findOne({ username }, 'id username discord_id');
 
     return res.json(createdUser);
   } catch (err) {
@@ -166,12 +177,13 @@ router.post('/users', async (req, res, next) => {
 router.post('/users/:userId', async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const { username, discord_id, password } = req.body;
+    const { username, discord_id, password, admin } = req.body;
 
     const result = Joi.validate({ username, discord_id, password }, Joi.object().keys({
       username: Joi.string().alphanum().min(3).max(50),
       discord_id: Joi.string().regex(/^[0-9]{11}$/),
       password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/),
+      admin: Joi.boolean(),
     }));
 
     let user;
@@ -185,20 +197,23 @@ router.post('/users/:userId', async (req, res, next) => {
       throw new ResourceNotFoundError('The user does not exist.', 'USER_NOT_FOUND');
     }
 
-    if (username) {
-      user.username = username;
+    if (result.username) {
+      user.username = result.username;
     }
-    if (discord_id) {
-      user.discord_id = discord_id;
+    if (result.discord_id) {
+      user.discord_id = result.discord_id;
     }
-    if (password) {
+    if (result.password) {
       try {
-        user.password = await bcrypt.hash(password, 8);
+        user.password = await bcrypt.hash(result.password, 8);
       } catch (err) {
         console.error('Could not hash password: ', JSON.stringify(err));
 
         throw new BadRequestError('Password is not valid.');
       }
+    }
+    if (result.admin === true || result.admin === false) {
+      user.admin = result.admin;
     }
 
     try {

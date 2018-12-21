@@ -99,9 +99,12 @@ components:
           type: string
         discord_id:
           type: string
+        admin:
+          type: boolean
       example:
-        username: Nakasar
+        username: john Smith
         discord_id: 11119836820
+        admin: false
     User:
       allOf:
         - $ref: '#/components/schemas/UserCreate'
