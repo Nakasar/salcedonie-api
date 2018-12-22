@@ -2,6 +2,8 @@ const { ForbiddenError, MissingAuthenticationError } = require('../errors');
 
 const TokenService = require('../services/token.service');
 
+const Application = require('../models/application.model');
+
 const AUTHENTICATION_TYPES = {
     USER: 'USER',
     APPLICATION: 'APPLICATION',
@@ -34,13 +36,18 @@ const authenticationStrategies = {
         },
     },
     API_KEY: {
-        validate: ({ api_key }) => {
+        validate: async ({ api_key }) => {
             let authentication = null;
 
             if (!api_key) { return authentication; }
 
-            // TODO: validate API_KEY
-            authentication = { is_valid: true, type: AUTHENTICATION_TYPES.APPLICATION, data: { application_name: 'salcedonie-discord-bot' } };
+            const application = await Application.findOne({ api_key });
+
+            if (application) {
+                authentication = { is_valid: true, type: AUTHENTICATION_TYPES.APPLICATION, data: { application_name: application.name } };
+            } else {
+                authentication = { is_valid: false, type: AUTHENTICATION_TYPES.APPLICATION, errorDetails: "The provided 'API_KEY' in header is not valid." };
+            }
 
             return authentication;
         },
@@ -51,12 +58,13 @@ async function authenticate(req, res, next) {
     const authenticationStrategy = getAuthenticationStrategy(req.headers);
 
     req.locals = req.locals || {};
-    req.locals.authentication = authenticationStrategy ? authenticationStrategy.validate(req.headers) : null;
+    req.locals.authentication = authenticationStrategy ? await authenticationStrategy.validate(req.headers) : null;
 
     return next();
 }
 
 function getAuthenticationStrategy(headers) {
+    console.log(headers);
     if (headers.api_key) {
         return authenticationStrategies.API_KEY;
     }
@@ -116,7 +124,7 @@ function verifyAuthentication(locals) {
     }
 
     if (!locals.authentication.is_valid) {
-        throw new ForbiddenError("'Authentication: Bearer [token]' in header is not valid or has expired.");
+        throw new ForbiddenError(`Authentication is not valid. Error details: ${locals.authentication.errorDetails}`);
     }
 
     return true;

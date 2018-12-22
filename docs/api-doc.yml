@@ -637,13 +637,15 @@ components:
       scheme: bearer
       bearerFormat: JWT
     user:
+      description: User Bearer token
       type: http
       scheme: bearer
       bearerFormat: JWT
     application:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+      description: Application API key
+      type: apiKey
+      name: API_KEY
+      in: header
   parameters:
     userId:
       name: userId

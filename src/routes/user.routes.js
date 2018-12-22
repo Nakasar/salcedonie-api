@@ -14,6 +14,7 @@ const router = express.Router();
  * components:
  *  securitySchemes:
  *    user:
+ *      description: User Bearer token
  *      type: http
  *      scheme: bearer
  *      bearerFormat: JWT
@@ -26,9 +27,10 @@ const router = express.Router();
  * components:
  *  securitySchemes:
  *    application:
- *      type: http
- *      scheme: bearer
- *      bearerFormat: JWT
+ *      description: Application API key
+ *      type: apiKey
+ *      name: API_KEY
+ *      in: header
  */
 
 /**
