@@ -103,6 +103,7 @@ paths:
         - users
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/userId'
       responses:
@@ -118,6 +119,7 @@ paths:
         - users
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/userId'
       requestBody:
@@ -141,6 +143,7 @@ paths:
         - events
       security:
         - user: []
+        - application: []
       responses:
         '200':
           description: List of events the user may access.
@@ -156,6 +159,7 @@ paths:
         - events
       security:
         - user: []
+        - application: []
       requestBody:
         description: Event to create
         content:
@@ -176,6 +180,7 @@ paths:
         - events
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/eventId'
       responses:
@@ -191,6 +196,7 @@ paths:
         - events
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/eventId'
       requestBody:
@@ -213,6 +219,7 @@ paths:
         - events
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/eventId'
       responses:
@@ -225,6 +232,7 @@ paths:
         - actions
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/eventId'
       responses:
@@ -242,6 +250,7 @@ paths:
         - actions
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/eventId'
       requestBody:
@@ -265,6 +274,7 @@ paths:
         - actions
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/eventId'
         - $ref: '#/components/parameters/actionId'
@@ -281,6 +291,7 @@ paths:
         - actions
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/eventId'
         - $ref: '#/components/parameters/actionId'
@@ -304,6 +315,7 @@ paths:
         - actions
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/eventId'
         - $ref: '#/components/parameters/actionId'
@@ -317,6 +329,7 @@ paths:
         - characters
       security:
         - user: []
+        - application: []
       responses:
         '200':
           description: List of characters
@@ -332,6 +345,7 @@ paths:
         - characters
       security:
         - user: []
+        - application: []
       requestBody:
         description: Character to create
         required: true
@@ -609,6 +623,10 @@ components:
       scheme: bearer
       bearerFormat: JWT
     user:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    application:
       type: http
       scheme: bearer
       bearerFormat: JWT

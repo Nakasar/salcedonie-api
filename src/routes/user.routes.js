@@ -8,12 +8,24 @@ const { requireAuthentication } = require('../middlewares/authentication.middlew
 const router = express.Router();
 
 /**
- * USER SECURITY SCHEME
+ * SECURITY SCHEME: user
  * @swagger
  *
  * components:
  *  securitySchemes:
  *    user:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ */
+
+/**
+ * SECURITY SCHEME: application
+ * @swagger
+ *
+ * components:
+ *  securitySchemes:
+ *    application:
  *      type: http
  *      scheme: bearer
  *      bearerFormat: JWT
@@ -270,6 +282,7 @@ router.use(requireAuthentication);
  *      - users
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/userId'
  *    responses:
@@ -294,6 +307,7 @@ router.get('/users/:userId/default-character', (req, res) => {
  *      - users
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/userId'
  *    requestBody:
@@ -325,6 +339,7 @@ router.post('/users/:userId/default-character', (req, res) => {
  *      - events
  *    security:
  *      - user: []
+ *      - application: []
  *    responses:
  *      200:
  *        description: List of events the user may access.
@@ -349,6 +364,7 @@ router.get('/events', (req, res) => {
  *      - events
  *    security:
  *      - user: []
+ *      - application: []
  *    requestBody:
  *      description: Event to create
  *      content:
@@ -377,6 +393,7 @@ router.post('/events', (req, res) => {
  *      - events
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/eventId'
  *    responses:
@@ -401,6 +418,7 @@ router.get('/events/:eventId', (req, res) => {
  *      - events
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/eventId'
  *    requestBody:
@@ -432,6 +450,7 @@ router.patch('/events/:eventId', (req, res) => {
  *      - events
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/eventId'
  *    responses:
@@ -452,6 +471,7 @@ router.delete('/events/:eventId', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/eventId'
  *    responses:
@@ -478,6 +498,7 @@ router.get('/events/:eventId/actions', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/eventId'
  *    requestBody:
@@ -509,6 +530,7 @@ router.post('/events/:eventId/actions', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/eventId'
  *      - $ref: '#/components/parameters/actionId'
@@ -534,6 +556,7 @@ router.get('/events/:eventId/actions/:actionId', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/eventId'
  *      - $ref: '#/components/parameters/actionId'
@@ -566,6 +589,7 @@ router.patch('/events/:eventId/actions/:actionId', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/eventId'
  *      - $ref: '#/components/parameters/actionId'
@@ -587,6 +611,7 @@ router.delete('/events/:eventId/actions/:actionId', (req, res) => {
  *      - characters
  *    security:
  *      - user: []
+ *      - application: []
  *    responses:
  *      200:
  *        description: List of characters
@@ -611,6 +636,7 @@ router.get('/characters', (req, res) => {
  *      - characters
  *    security:
  *      - user: []
+ *      - application: []
  *    requestBody:
  *      description: Character to create
  *      required: true
@@ -640,6 +666,7 @@ router.post('/characters', (req, res) => {
  *      - characters
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/characterId'
  *    responses:
@@ -666,6 +693,7 @@ router.get('/characters/:characterId', (req, res) => {
  *      - characters
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/characterId'
  *    requestBody:
@@ -699,6 +727,7 @@ router.patch('/characters/:characterId', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *      - application: []
  *    parameters:
  *      - $ref: '#/components/parameters/characterId'
  *    responses:
@@ -725,6 +754,7 @@ router.get('/characters/:characterId/actions', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *      - application: []
  *    responses:
  *      200:
  *        description: List of actions
