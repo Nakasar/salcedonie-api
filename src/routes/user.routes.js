@@ -13,13 +13,26 @@ router.use(requireAuthentication);
 /**
  * @swagger
  *
- * /accounts/{accountId}:
+ * /users/{userId}/default-character:
  *  get:
- *    operationId: getAccount
+ *    operationId: getUserDefaultCharacter
  *    tags:
- *      - events
+ *      - users
  */
-router.get('/accounts/:accountId', (req, res) => {
+router.get('/users/:userId/default-character', (req, res) => {
+
+});
+
+/**
+ * @swagger
+ *
+ * /users/{userId}/default-character:
+ *  post:
+ *    operationId: updateUserDefaultCharacter
+ *    tags:
+ *      - users
+ */
+router.post('/users/:userId/default-character', (req, res) => {
 
 });
 
@@ -134,10 +147,22 @@ router.get('/events/:eventId/actions/:actionId', (req, res) => {
  *  patch:
  *    operationId: updateAction
  *    tags:
- *      - events
  *      - actions
  */
 router.patch('/events/:eventId/actions/:actionId', (req, res) => {
+
+});
+
+/**
+ * @swagger
+ *
+ * /events/{eventId}/actions/{actionId}:
+ *  delete:
+ *    operationId: deleteAction
+ *    tags:
+ *      - actions
+ */
+router.delete('/events/:eventId/actions/:actionId', (req, res) => {
 
 });
 
@@ -200,7 +225,6 @@ router.patch('/characters/:characterId', (req, res) => {
  *  get:
  *    operationId: getCharacterActions
  *    tags:
- *      - characters
  *      - actions
  */
 router.get('/characters/:characterId/actions', (req, res) => {

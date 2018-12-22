@@ -63,6 +63,8 @@ router.use(requireAdminRights);
  *    operationId: getUsers
  *    summary: Get existing users
  *    description: Get existing users summaries.
+ *    tags:
+ *      - users
  *    security:
  *      - admin: []
  *    responses:
@@ -94,6 +96,8 @@ router.get('/users', async (req, res, next) => {
  *    operationId: createUser
  *    summary: Create a user
  *    description: Create a user
+ *    tags:
+ *      - users
  *    security:
  *      - admin: []
  *    requestBody:
@@ -160,6 +164,8 @@ router.post('/users', async (req, res, next) => {
  *    operationId: updateUser
  *    summary: Update a user
  *    description: Update a user
+ *    tags:
+ *      - users
  *    security:
  *      - admin: []
  *    parameters:

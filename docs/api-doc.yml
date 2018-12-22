@@ -42,6 +42,8 @@ paths:
       operationId: getUsers
       summary: Get existing users
       description: Get existing users summaries.
+      tags:
+        - users
       security:
         - admin: []
       responses:
@@ -57,6 +59,8 @@ paths:
       operationId: createUser
       summary: Create a user
       description: Create a user
+      tags:
+        - users
       security:
         - admin: []
       requestBody:
@@ -77,6 +81,8 @@ paths:
       operationId: updateUser
       summary: Update a user
       description: Update a user
+      tags:
+        - users
       security:
         - admin: []
       parameters:
@@ -90,11 +96,15 @@ paths:
       responses:
         '204':
           description: User updated
-  '/accounts/{accountId}':
+  '/users/{userId}/default-character':
     get:
-      operationId: getAccount
+      operationId: getUserDefaultCharacter
       tags:
-        - events
+        - users
+    post:
+      operationId: updateUserDefaultCharacter
+      tags:
+        - users
   /events:
     get:
       operationId: getEvents
@@ -134,7 +144,10 @@ paths:
     patch:
       operationId: updateAction
       tags:
-        - events
+        - actions
+    delete:
+      operationId: deleteAction
+      tags:
         - actions
   /characters:
     get:
@@ -158,7 +171,6 @@ paths:
     get:
       operationId: getCharacterActions
       tags:
-        - characters
         - actions
   /actions:
     get:
