@@ -7,6 +7,7 @@ const { BadRequestError } = require('./errors');
 const { authenticate } = require('./middlewares/authentication.middleware');
 
 const adminRouter = require('./routes/admin.routes');
+const userRouter = require('./routes/user.routes');
 
 const User = require('./models/user.model');
 
@@ -88,35 +89,7 @@ function init(config) {
 
   app.use(adminRouter);
 
-  app.get('/actions', (req, res) => {
-    const actions = [{ id: 'On973jdn987', character, date, hour, event: 'ode09a198dn', message }];
-
-    return res.json(actions);
-  });
-
-  app.post('/actions', (req, res) => {
-    const { character, date, hour, event, message } = req.body;
-
-    const action = { id: 'On973jdn987', character, date, hour, event: 'ode09a198dn', message };
-
-    res.set('Location', action.id);
-
-    return res.sendStatus(201);
-  });
-
-  app.delete('/actions/:actionId', (req, res) => {
-    return res.sendStatus(204);
-  });
-
-  app.get('/actions/:actionId', (req, res) => {
-    const action = { id: 'On973jdn987', character, date, hour, event: 'ode09a198dn', message };
-
-    return res.json(action);
-  });
-
-  app.put('/actions/:actionId', (req, res) => {
-    return res.sendStatus(204);
-  });
+  app.use(userRouter);
 
   app.use('*', (req, res) => {
     res.status(404);

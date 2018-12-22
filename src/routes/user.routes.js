@@ -9,7 +9,6 @@ const router = express.Router();
 
 router.use(requireAuthentication);
 
-
 /**
  * @swagger
  *
@@ -244,4 +243,4 @@ router.get('/actions', (req, res) => {
 
 });
 
-return router;
+module.exports = router;
