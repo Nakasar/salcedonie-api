@@ -3,7 +3,7 @@ const Joi = require('joi');
 
 const { BadRequestError, ResourceNotFoundError } = require('../errors');
 
-const { requireAuthentication } = require('../middlewares/authentication.middleware');
+const { requireAuthentication, requireAdminRights, requireApplicationAuthentication } = require('../middlewares/authentication.middleware');
 
 const router = express.Router();
 
@@ -271,6 +271,68 @@ router.use(requireAuthentication);
  *        type: string
  *        example: '5c1c06cd8d93224570fcc65b'
  */
+
+/**
+ * ROUTE: /users, getUsers
+ * @swagger
+ *
+ * /users:
+ *  get:
+ *    operationId: getUsers
+ *    summary: Get existing users
+ *    description: >-
+ *      Get existing users summaries. Admin will retrieve full user objects, whereas application may only retrieve
+ *      user id and discord_id.
+ *    tags:
+ *      - users
+ *    parameters:
+ *      - name: discord_id
+ *        in: query
+ *        description: search by exact match on discord_id
+ *        schema:
+ *          type: integer
+ *          example: 11119836820
+ *    security:
+ *      - admin: []
+ *      - application: []
+ *    responses:
+ *      200:
+ *        description: List of users.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/User'
+ *
+ */
+router
+  .get('/users', requireAdminRights, async (req, res, next) => {
+    try {
+      const users = await User.find({}, 'id username discord_id');
+
+      return res.json(users);
+    } catch (err) {
+      return next(err);
+    }
+  })
+  .get('/users', requireApplicationAuthentication, async (req, res, next) => {
+    try {
+      const { discord_id } = req.query;
+
+      const query = {};
+
+      if (discord_id) {
+        query.discord_id = discord_id;
+      }
+
+      const users = await User.find(query, 'id discord_id');
+
+      return res.json(users);
+    } catch (err) {
+      return next(err);
+    }
+  });
 
 /**
  * @swagger

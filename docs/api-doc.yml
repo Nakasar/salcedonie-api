@@ -38,23 +38,6 @@ paths:
               schema:
                 type: string
   /users:
-    get:
-      operationId: getUsers
-      summary: Get existing users
-      description: Get existing users summaries.
-      tags:
-        - users
-      security:
-        - admin: []
-      responses:
-        '200':
-          description: List of users.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
     post:
       operationId: createUser
       summary: Create a user
@@ -76,6 +59,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+    get:
+      operationId: getUsers
+      summary: Get existing users
+      description: >-
+        Get existing users summaries. Admin will retrieve full user objects,
+        whereas application may only retrieve user id and discord_id.
+      tags:
+        - users
+      parameters:
+        - name: discord_id
+          in: query
+          description: search by exact match on discord_id
+          schema:
+            type: integer
+            example: 11119836820
+      security:
+        - admin: []
+        - application: []
+      responses:
+        '200':
+          description: List of users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
   '/users/{userId}':
     post:
       operationId: updateUser
@@ -367,6 +377,7 @@ paths:
         - characters
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/characterId'
       responses:
@@ -384,6 +395,7 @@ paths:
         - characters
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/characterId'
       requestBody:
@@ -409,6 +421,7 @@ paths:
         - actions
       security:
         - user: []
+        - application: []
       parameters:
         - $ref: '#/components/parameters/characterId'
       responses:
@@ -427,6 +440,7 @@ paths:
         - actions
       security:
         - user: []
+        - application: []
       responses:
         '200':
           description: List of actions

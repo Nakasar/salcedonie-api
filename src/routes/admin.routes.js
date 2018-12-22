@@ -13,6 +13,7 @@ const router = express.Router();
 router.use(requireAdminRights);
 
 /**
+ * SCHEMA: User
  * @swagger
  *
  * components:
@@ -45,39 +46,6 @@ router.use(requireAdminRights);
  *      scheme: bearer
  *      bearerFormat: JWT
  */
-
-/**
- * @swagger
- *
- * /users:
- *  get:
- *    operationId: getUsers
- *    summary: Get existing users
- *    description: Get existing users summaries.
- *    tags:
- *      - users
- *    security:
- *      - admin: []
- *    responses:
- *      200:
- *        description: List of users.
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/User'
- *
- */
-router.get('/users', async (req, res, next) => {
-  try {
-    const users = await User.find({}, 'id username discord_id');
-
-    return res.json(users);
-  } catch (err) {
-    return next(err);
-  }
-});
 
 /**
  * @swagger
