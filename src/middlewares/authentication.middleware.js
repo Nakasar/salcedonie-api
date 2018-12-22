@@ -114,8 +114,12 @@ function requireAuthentication(req, res, next) {
     }
 }
 
-function verifyAdminRights(data) {
-    return data && data.is_admin;
+function verifyAdminRights({ type, data }) {
+    return (type === AUTHENTICATION_TYPES.APPLICATION) && data && data.is_admin;
+}
+
+function verifyApplicationRights({ type }) {
+    return (type === AUTHENTICATION_TYPES.APPLICATION);
 }
 
 function verifyAuthentication(locals) {
@@ -135,4 +139,6 @@ module.exports = {
     requireAdminRights,
     requireApplicationAuthentication,
     requireAuthentication,
+    verifyAdminRights,
+    verifyApplicationRights,
 };

@@ -6,7 +6,6 @@ const { BadRequestError } = require('./errors');
 
 const { authenticate } = require('./middlewares/authentication.middleware');
 
-const adminRouter = require('./routes/admin.routes');
 const userRouter = require('./routes/user.routes');
 
 const User = require('./models/user.model');
@@ -86,8 +85,6 @@ function init(config) {
   });
 
   app.use(authenticate);
-
-  app.use(adminRouter);
 
   app.use(userRouter);
 

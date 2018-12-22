@@ -38,27 +38,6 @@ paths:
               schema:
                 type: string
   /users:
-    post:
-      operationId: createUser
-      summary: Create a user
-      description: Create a user
-      tags:
-        - users
-      security:
-        - admin: []
-      requestBody:
-        description: User to create
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-      responses:
-        '201':
-          description: User created (see id in Location header)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
     get:
       operationId: getUsers
       summary: Get existing users
@@ -86,6 +65,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+    post:
+      operationId: createUser
+      summary: Create a user
+      description: Create a user
+      tags:
+        - users
+      security:
+        - admin: []
+      requestBody:
+        description: User to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: User created (see id in Location header)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
   '/users/{userId}':
     post:
       operationId: updateUser
@@ -451,29 +451,22 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActionSummary'
 components:
+  securitySchemes:
+    user:
+      description: User Bearer token
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    application:
+      description: Application API key
+      type: apiKey
+      name: API_KEY
+      in: header
+    admin:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
-    UserCreate:
-      type: object
-      properties:
-        username:
-          type: string
-        discord_id:
-          type: string
-        admin:
-          type: boolean
-      example:
-        username: john Smith
-        discord_id: 11119836820
-        admin: false
-    User:
-      allOf:
-        - $ref: '#/components/schemas/UserCreate'
-        - type: object
-          properties:
-            id:
-              type: string
-          example:
-            id: 5c1c06cd8d93224570fcc65b
     EventSummary:
       type: object
       properties:
@@ -631,21 +624,28 @@ components:
         location: Au bar de Frid
         description: Henry s'empare d'un verre et le descend d'une traite.
         character: 5c1c06cd8d93224570fcc65b
-  securitySchemes:
-    admin:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-    user:
-      description: User Bearer token
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-    application:
-      description: Application API key
-      type: apiKey
-      name: API_KEY
-      in: header
+    UserCreate:
+      type: object
+      properties:
+        username:
+          type: string
+        discord_id:
+          type: string
+        admin:
+          type: boolean
+      example:
+        username: john Smith
+        discord_id: 11119836820
+        admin: false
+    User:
+      allOf:
+        - $ref: '#/components/schemas/UserCreate'
+        - type: object
+          properties:
+            id:
+              type: string
+          example:
+            id: 5c1c06cd8d93224570fcc65b
   parameters:
     userId:
       name: userId
