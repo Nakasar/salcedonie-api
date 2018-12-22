@@ -197,6 +197,70 @@ const router = express.Router();
 router.use(requireAuthentication);
 
 /**
+ * PARAMETER: userId
+ * @swagger
+ *
+ * components:
+ *  parameters:
+ *    userId:
+ *      name: userId
+ *      in: path
+ *      required: true
+ *      description: User ID
+ *      schema:
+ *        type: string
+ *        example: '5c1c06cd8d93224570fcc65b'
+ */
+
+/**
+ * PARAMETER: characterId
+ * @swagger
+ *
+ * components:
+ *  parameters:
+ *    characterId:
+ *      name: characterId
+ *      in: path
+ *      required: true
+ *      description: Character ID
+ *      schema:
+ *        type: string
+ *        example: '5c1c06cd8d93224570fcc65b'
+ */
+
+/**
+ * PARAMETER: eventId
+ * @swagger
+ *
+ * components:
+ *  parameters:
+ *    eventId:
+ *      name: eventId
+ *      in: path
+ *      required: true
+ *      description: Event ID
+ *      schema:
+ *        type: string
+ *        example: '5c1c06cd8d93224570fcc65b'
+ */
+
+/**
+ * PARAMETER: actionId
+ * @swagger
+ *
+ * components:
+ *  parameters:
+ *    actionId:
+ *      name: actionId
+ *      in: path
+ *      required: true
+ *      description: Action ID
+ *      schema:
+ *        type: string
+ *        example: '5c1c06cd8d93224570fcc65b'
+ */
+
+/**
  * @swagger
  *
  * /users/{userId}/default-character:
@@ -206,6 +270,8 @@ router.use(requireAuthentication);
  *      - users
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/userId'
  *    responses:
  *      200:
  *        description: Default character of user
@@ -228,6 +294,8 @@ router.get('/users/:userId/default-character', (req, res) => {
  *      - users
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/userId'
  *    requestBody:
  *      description: Default character id to set as default
  *      content:
@@ -309,6 +377,8 @@ router.post('/events', (req, res) => {
  *      - events
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/eventId'
  *    responses:
  *      200:
  *        description: Event requested.
@@ -331,6 +401,8 @@ router.get('/events/:eventId', (req, res) => {
  *      - events
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/eventId'
  *    requestBody:
  *      description: Event to update
  *      required: true
@@ -360,6 +432,8 @@ router.patch('/events/:eventId', (req, res) => {
  *      - events
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/eventId'
  *    responses:
  *      204:
  *        description: Event archived
@@ -378,6 +452,8 @@ router.delete('/events/:eventId', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/eventId'
  *    responses:
  *      200:
  *        description: List of actions of event.
@@ -402,6 +478,8 @@ router.get('/events/:eventId/actions', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/eventId'
  *    requestBody:
  *      description: Action to create
  *      required: true
@@ -431,6 +509,9 @@ router.post('/events/:eventId/actions', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/eventId'
+ *      - $ref: '#/components/parameters/actionId'
  *    responses:
  *      200:
  *        description: Requested Action
@@ -453,6 +534,9 @@ router.get('/events/:eventId/actions/:actionId', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/eventId'
+ *      - $ref: '#/components/parameters/actionId'
  *    requestBody:
  *      description: Action to update
  *      required: true
@@ -482,6 +566,9 @@ router.patch('/events/:eventId/actions/:actionId', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/eventId'
+ *      - $ref: '#/components/parameters/actionId'
  *    responses:
  *      204:
  *        description: Action deleted
@@ -553,6 +640,8 @@ router.post('/characters', (req, res) => {
  *      - characters
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/characterId'
  *    responses:
  *      200:
  *        description: Requested Character
@@ -577,6 +666,8 @@ router.get('/characters/:characterId', (req, res) => {
  *      - characters
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/characterId'
  *    requestBody:
  *      description: Character to update
  *      required: true
@@ -608,6 +699,8 @@ router.patch('/characters/:characterId', (req, res) => {
  *      - actions
  *    security:
  *      - user: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/characterId'
  *    responses:
  *      200:
  *        description: List of actions of character.

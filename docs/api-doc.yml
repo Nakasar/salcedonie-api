@@ -103,6 +103,8 @@ paths:
         - users
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/userId'
       responses:
         '200':
           description: Default character of user
@@ -116,6 +118,8 @@ paths:
         - users
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/userId'
       requestBody:
         description: Default character id to set as default
         content:
@@ -172,6 +176,8 @@ paths:
         - events
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/eventId'
       responses:
         '200':
           description: Event requested.
@@ -185,6 +191,8 @@ paths:
         - events
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/eventId'
       requestBody:
         description: Event to update
         required: true
@@ -205,6 +213,8 @@ paths:
         - events
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/eventId'
       responses:
         '204':
           description: Event archived
@@ -215,6 +225,8 @@ paths:
         - actions
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/eventId'
       responses:
         '200':
           description: List of actions of event.
@@ -230,6 +242,8 @@ paths:
         - actions
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/eventId'
       requestBody:
         description: Action to create
         required: true
@@ -251,6 +265,9 @@ paths:
         - actions
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/eventId'
+        - $ref: '#/components/parameters/actionId'
       responses:
         '200':
           description: Requested Action
@@ -264,6 +281,9 @@ paths:
         - actions
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/eventId'
+        - $ref: '#/components/parameters/actionId'
       requestBody:
         description: Action to update
         required: true
@@ -284,6 +304,9 @@ paths:
         - actions
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/eventId'
+        - $ref: '#/components/parameters/actionId'
       responses:
         '204':
           description: Action deleted
@@ -330,6 +353,8 @@ paths:
         - characters
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/characterId'
       responses:
         '200':
           description: Requested Character
@@ -345,6 +370,8 @@ paths:
         - characters
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/characterId'
       requestBody:
         description: Character to update
         required: true
@@ -368,6 +395,8 @@ paths:
         - actions
       security:
         - user: []
+      parameters:
+        - $ref: '#/components/parameters/characterId'
       responses:
         '200':
           description: List of actions of character.
@@ -588,7 +617,31 @@ components:
       name: userId
       in: path
       required: true
-      description: ID of user
+      description: User ID
+      schema:
+        type: string
+        example: 5c1c06cd8d93224570fcc65b
+    characterId:
+      name: characterId
+      in: path
+      required: true
+      description: Character ID
+      schema:
+        type: string
+        example: 5c1c06cd8d93224570fcc65b
+    eventId:
+      name: eventId
+      in: path
+      required: true
+      description: Event ID
+      schema:
+        type: string
+        example: 5c1c06cd8d93224570fcc65b
+    actionId:
+      name: actionId
+      in: path
+      required: true
+      description: Action ID
       schema:
         type: string
         example: 5c1c06cd8d93224570fcc65b

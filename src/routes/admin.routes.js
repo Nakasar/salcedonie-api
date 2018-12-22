@@ -44,15 +44,6 @@ router.use(requireAdminRights);
  *      type: http
  *      scheme: bearer
  *      bearerFormat: JWT
- *  parameters:
- *    userId:
- *      name: userId
- *      in: path
- *      required: true
- *      description: ID of user
- *      schema:
- *        type: string
- *        example: '5c1c06cd8d93224570fcc65b'
  */
 
 /**
