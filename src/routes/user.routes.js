@@ -313,7 +313,7 @@ router.use(requireAuthentication);
  */
 
 /**
- * ROUTE: /users, getUsers
+ * ROUTE: GET /users, getUsers
  * @swagger
  *
  * /users:

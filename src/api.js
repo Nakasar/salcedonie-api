@@ -22,6 +22,7 @@ function init(config) {
   app.use(cors());
 
   /**
+   * ROUTE POST /auth, auth
    * @swagger
    *
    * /auth:
