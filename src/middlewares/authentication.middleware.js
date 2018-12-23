@@ -115,7 +115,7 @@ function requireAuthentication(req, res, next) {
 }
 
 function verifyAdminRights({ type, data }) {
-    return (type === AUTHENTICATION_TYPES.APPLICATION) && data && data.is_admin;
+    return (type === AUTHENTICATION_TYPES.USER) && data && data.is_admin;
 }
 
 function verifyApplicationRights({ type }) {

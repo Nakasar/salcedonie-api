@@ -348,6 +348,7 @@ router.use(requireAuthentication);
  */
 router
   .get('/users', requireAuthentication, async (req, res, next) => {
+    console.log(req.locals);
     if (verifyAdminRights(req.locals.authentication)) {
       try {
         const { discord_id } = req.query;
@@ -358,7 +359,7 @@ router
           query.discord_id = discord_id;
         }
 
-        const users = await User.find(query, 'id discord_id');
+        const users = await User.find(query, 'id username discord_id');
 
         return res.json(users);
       } catch (err) {
