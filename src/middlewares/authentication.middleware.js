@@ -80,7 +80,7 @@ function requireAdminRights(req, res, next) {
     try {
         verifyAuthentication(req.locals);
 
-        if (verifyAdminRights(req.locals.authentication.data)) {
+        if (verifyAdminRights(req.locals.authentication)) {
             return next();
         } else {
             throw new ForbiddenError('Administrator privileges are required.');
@@ -94,7 +94,7 @@ function requireApplicationAuthentication(req, res, next) {
     try {
         verifyAuthentication(req.locals);
 
-        if (locals.authentication.type === AUTHENTICATION_TYPES.APPLICATION) {
+        if (req.locals.authentication.type === AUTHENTICATION_TYPES.APPLICATION) {
             return next();
         } else {
             throw new ForbiddenError('Application authentication is required to perform this action.');

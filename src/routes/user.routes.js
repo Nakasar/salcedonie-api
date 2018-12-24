@@ -348,7 +348,6 @@ router.use(requireAuthentication);
  */
 router
   .get('/users', requireAuthentication, async (req, res, next) => {
-    console.log(req.locals);
     if (verifyAdminRights(req.locals.authentication)) {
       try {
         const { discord_id } = req.query;
@@ -527,6 +526,55 @@ router.post('/users/:userId', requireAdminRights, async (req, res, next) => {
     }
 
     return res.sendStatus(204);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/**
+ * @swagger
+ *
+ * /users/{userId}:
+ *  get:
+ *    operationId: getUser
+ *    summary: Get details of an user
+ *    description: Get details of an user
+ *    tags:
+ *      - users
+ *    security:
+ *      - admin: []
+ *      - user: []
+ *      - application: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/userId'
+ *    responses:
+ *      200:
+ *        description: User details
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/User'
+ */
+router.get('/users/:userId', requireAuthentication, async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    let user;
+    if (verifyAdminRights(req.locals.authentication) || verifyApplicationRights(req.locals.authentication)) {
+      user = await User.findOne({ _id: userId }, 'id username discord_id');
+    } else {
+      if (req.locals.authentication.data.user_id !== userId) {
+        throw new ForbiddenError('You may only access your own information.');
+      }
+
+      user = await User.findOne({ _id: userId }, 'id username discord_id');
+    }
+
+    if(!user) {
+      throw new ResourceNotFoundError('No user found.');
+    }
+
+    return res.json(user);
   } catch (err) {
     return next(err);
   }
