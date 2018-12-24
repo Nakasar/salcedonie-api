@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const Joi = require('joi');
 
-const { BadRequestError, ForbiddenError, ResourceNotFoundError } = require('../errors');
+const { BadRequestError, ConflictError, ForbiddenError, ResourceNotFoundError } = require('../errors');
 
 const { requireAuthentication, requireAdminRights, verifyAdminRights, verifyApplicationRights } = require('../middlewares/authentication.middleware');
 
@@ -416,13 +416,15 @@ router.post('/users', requireAdminRights, async (req, res, next) => {
     const { username, discord_id, password } = req.body;
 
     const result = Joi.validate({ username, discord_id, password }, Joi.object().keys({
-      username: Joi.string().alphanum().min(3).max(50).required(),
+      username: Joi.string().regex(/^[a-zA-Z\u00C0-\u017F ]{3,50}$/).required(),
       discord_id: Joi.string().regex(/^[0-9]{11}$/).required(),
       password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/),
     }));
 
     if (result.error) {
-      throw new BadRequestError('body should be { username: alphanum{3-50}, discord_id: [valid discord ID], password: [a-zA-Z0-9]{8,30}')
+      console.log(result.error);
+
+      throw new BadRequestError(`body should be { username: alphanum{3-50}, discord_id: [valid discord ID], password: [a-zA-Z0-9]{8,30}. Details: ${result.error.details.map(e => e.message).join(', ')}`)
     }
 
     let hash;
@@ -436,10 +438,10 @@ router.post('/users', requireAdminRights, async (req, res, next) => {
 
     const userFound = await User.findOne({ $or: [{ username }, { discord_id }] });
     if (userFound && userFound.discord_id === discord_id)  {
-      throw new BadRequestError('There is already a user with this discord_id.');
+      throw new ConflictError('There is already a user with this discord_id.', 'EXISTING_DISCORD_ID');
     }
     if (userFound) {
-      throw new BadRequestError('There is already a user with this username.');
+      throw new ConflictError('There is already a user with this username.', 'EXISTING_USERNAME');
     }
 
     const user = new User({ username, discord_id, password: hash });

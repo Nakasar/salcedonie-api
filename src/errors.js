@@ -6,6 +6,14 @@ class BadRequestError extends Error {
     }
 }
 
+class ConflictError extends Error {
+    constructor(message, id) {
+        super(message);
+        this.status = 409;
+        this.name = id || 'CONFLICT';
+    }
+}
+
 class ForbiddenError extends Error {
     constructor(message, id) {
         super(message);
@@ -32,6 +40,7 @@ class ResourceNotFoundError extends Error {
 
 module.exports = {
     BadRequestError,
+    ConflictError,
     ForbiddenError,
     MissingAuthenticationError,
     ResourceNotFoundError,
