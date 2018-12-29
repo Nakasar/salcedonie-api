@@ -37,68 +37,6 @@ const router = express.Router();
  */
 
 /**
- * EVENT SCHEMAS
- * @swagger
- *
- * components:
- *  schemas:
- *    EventSummary:
- *      type: object
- *      properties:
- *        id:
- *          type: string
- *        title:
- *          type: string
- *        description:
- *          type: string
- *        active:
- *          type: boolean
- *          description: Prevent user from posting actions if false.
- *        owner:
- *          type: string
- *          description: User that own the event.
- *      example:
- *        id: '5c1c06cd8d93224570fcc65b'
- *        title: Prologue
- *        description: Le commencement de notre aventure !
- *        active: true
- *        owner: '5c1c06cd8d93224570fcc65b'
- *    EventDetails:
- *      allOf:
- *        - $ref: '#/components/schemas/EventSummary'
- *        - type: object
- *          properties:
- *            text:
- *              type: string
- *          example:
- *            text: Voici un texte de description complet de l'évènement, avec éventuellement des intrusctions, etc.
- *    EventCreate:
- *      type: object
- *      properties:
- *        title:
- *          type: string
- *        description:
- *          type: string
- *        text:
- *           type: string
- *        active:
- *          type: boolean
- *          description: Prevent user from posting actions if false.
- *        owner:
- *          type: string
- *          description: User that own sthe event. Default to bearer of the token.
- *      required:
- *        - title
- *        - description
- *      example:
- *        title: Prologue
- *        description: Le commencement de notre aventure !
- *        text: Voici un texte de description complet de l'évènement, avec éventuellement des intrusctions, etc.
- *        active: true
- *        owner: '5c1c06cd8d93224570fcc65b'
- */
-
-/**
  * CHARACTER SCHEMAS
  * @swagger
  *
@@ -374,7 +312,7 @@ router
           query.discord_id = discord_id;
         }
 
-        const users = await User.find(query, 'id discord_id');
+        const users = await User.find(query, 'id username discord_id');
 
         return res.json(users);
       } catch (err) {
@@ -636,138 +574,6 @@ router.get('/users/:userId/default-character', (req, res) => {
  *              $ref: '#/components/schemas/CharacterDetails'
  */
 router.post('/users/:userId/default-character', (req, res) => {
-
-});
-
-/**
- * @swagger
- *
- * /events:
- *  get:
- *    operationId: getEvents
- *    tags:
- *      - events
- *    security:
- *      - user: []
- *      - application: []
- *    responses:
- *      200:
- *        description: List of events the user may access.
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/EventSummary'
- */
-router.get('/events', (req, res) => {
-
-});
-
-/**
- * @swagger
- *
- * /events:
- *  post:
- *    operationId: createEvent
- *    tags:
- *      - events
- *    security:
- *      - user: []
- *      - application: []
- *    requestBody:
- *      description: Event to create
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/EventCreate'
- *    responses:
- *      201:
- *        description: Event created.
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/EventDetails'
- */
-router.post('/events', (req, res) => {
-
-});
-
-/**
- * @swagger
- *
- * /events/{eventId}:
- *  get:
- *    operationId: Get event details and last infos.
- *    tags:
- *      - events
- *    security:
- *      - user: []
- *      - application: []
- *    parameters:
- *      - $ref: '#/components/parameters/eventId'
- *    responses:
- *      200:
- *        description: Event requested.
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/EventDetails'
- */
-router.get('/events/:eventId', (req, res) => {
-
-});
-
-/**
- * @swagger
- *
- * /events/{eventId}:
- *  patch:
- *    operationId: updateEvent
- *    tags:
- *      - events
- *    security:
- *      - user: []
- *      - application: []
- *    parameters:
- *      - $ref: '#/components/parameters/eventId'
- *    requestBody:
- *      description: Event to update
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *    responses:
- *      200:
- *        description: Updated Event
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/EventDetails'
- */
-router.patch('/events/:eventId', (req, res) => {
-
-});
-
-/**
- * @swagger
- *
- * /events/{eventId}:
- *  delete:
- *    operationId: archiveEvent
- *    tags:
- *      - events
- *    security:
- *      - user: []
- *      - application: []
- *    parameters:
- *      - $ref: '#/components/parameters/eventId'
- *    responses:
- *      204:
- *        description: Event archived
- */
-router.delete('/events/:eventId', (req, res) => {
 
 });
 

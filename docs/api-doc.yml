@@ -106,6 +106,25 @@ paths:
       responses:
         '204':
           description: User updated
+    get:
+      operationId: getUser
+      summary: Get details of an user
+      description: Get details of an user
+      tags:
+        - users
+      security:
+        - admin: []
+        - user: []
+        - application: []
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
   '/users/{userId}/default-character':
     get:
       operationId: getUserDefaultCharacter

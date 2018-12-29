@@ -7,6 +7,7 @@ const { BadRequestError } = require('./errors');
 const { authenticate } = require('./middlewares/authentication.middleware');
 
 const userRouter = require('./routes/user.routes');
+const eventRouter = require('./routes/event.routes');
 
 const User = require('./models/user.model');
 
@@ -88,6 +89,7 @@ function init(config) {
   app.use(authenticate);
 
   app.use(userRouter);
+  app.use(eventRouter);
 
   app.use('*', (req, res) => {
     res.status(404);
